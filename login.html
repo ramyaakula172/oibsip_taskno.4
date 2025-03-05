@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login, Register & Secured Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <div class="login-container" id="loginContainer">
+      <div class="login-form">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" name="emailId" required class="form-control" placeholder="Enter your email">
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" required class="form-control" placeholder="Enter your password">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Registration Form (Initially Hidden) -->
+    <div class="register-container" id="registerContainer" style="display: none;">
+      <div class="register-form">
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="registerName">Name</label>
+            <input type="text" id="registerName" name="name" required class="form-control" placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" name="emailId" required class="form-control" placeholder="Enter your email">
+          </div>
+
+          <div class="form-group">
+            <label for="registerPassword">Password</label>
+            <input type="password" id="registerPassword" name="password" required class="form-control" placeholder="Enter your password">
+          </div>
+
+          <div class="form-group">
+            <label for="registerConfirmPassword">Confirm Password</label>
+            <input type="password" id="registerConfirmPassword" name="confirmPassword" required class="form-control" placeholder="Confirm your password">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Secured Page (Initially Hidden) -->
+    <div class="secured-container" id="securedContainer" style="display: none;">
+      <h1>Welcome to the Secured Page</h1>
+      <p>You have logged in successfully!</p>
+
+      <h2>Registration Form</h2>
+      <form id="registerSecuredForm">
+        <div class="form-group">
+          <label for="securedName">Name</label>
+          <input type="text" id="securedName" name="name" required class="form-control" placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+          <label for="securedEmail">Email</label>
+          <input type="email" id="securedEmail" name="emailId" required class="form-control" placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+          <label for="securedPassword">Password</label>
+          <input type="password" id="securedPassword" name="password" required class="form-control" placeholder="Enter your password">
+        </div>
+
+        <div class="form-group">
+          <label for="securedConfirmPassword">Confirm Password</label>
+          <input type="password" id="securedConfirmPassword" name="confirmPassword" required class="form-control" placeholder="Confirm your password">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </form>
+
+      <button id="logoutBtn" class="btn btn-danger">Logout</button>
+    </div>
+  </div>
+
+  <!-- Popup Modal for Error Messages -->
+  <div id="popupModal" class="popup-modal" style="display: none;">
+    <div class="popup-content">
+      <p id="popupMessage" style="color: red;"></p>
+      <button id="closePopup" class="btn btn-secondary">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Simulate hardcoded credentials
+    const correctEmail = "user@example.com";
+    const correctPassword = "password123";
+
+    // Handle login form submission
+    document.getElementById("loginForm")?.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      // Check if credentials match
+      if (email === correctEmail && password === correctPassword) {
+        localStorage.setItem("isLoggedIn", "true");
+        showSecuredPage();
+      } else {
+        showPopup("Wrong email or password. Please try again.");
+      }
+    });
+
+    // Show error popup
+    function showPopup(message) {
+      const popupModal = document.getElementById("popupModal");
+      const popupMessage = document.getElementById("popupMessage");
+      popupMessage.textContent = message;
+      popupModal.style.display = "block";
+    }
+
+    // Close the popup
+    document.getElementById("closePopup")?.addEventListener("click", function() {
+      document.getElementById("popupModal").style.display = "none";
+    });
+
+    // Show Secured Page after successful login
+    function showSecuredPage() {
+      document.getElementById("loginContainer").style.display = "none";
+      document.getElementById("securedContainer").style.display = "block";
+    }
+
+    // Handle Register form in secured page
+    document.getElementById("registerSecuredForm")?.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("securedName").value;
+      const email = document.getElementById("securedEmail").value;
+      const password = document.getElementById("securedPassword").value;
+      const confirmPassword = document.getElementById("securedConfirmPassword").value;
+
+      if (password === confirmPassword) {
+        showPopup("Registration successful! Please logout.");
+      } else {
+        showPopup("Passwords do not match. Please try again.");
+      }
+    });
+
+    // Handle logout button
+    document.getElementById("logoutBtn")?.addEventListener("click", function() {
+      localStorage.removeItem("isLoggedIn");
+      window.location.reload();  // Reload page to reset to login screen
+    });
+  </script>
+</body>
+</html>
